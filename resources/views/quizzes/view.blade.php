@@ -37,7 +37,7 @@
                 </a>
                 @endif
                 @if($round->active)
-                    <a href="{{url('/round/' . $round->id . "/close")}}" class="ml-3" title="Attempt this round">
+                    <a href="{{url('/round/' . $round->id . "/attempt")}}" class="ml-3" title="Attempt this round">
                         [Attempt]
                     </a>
                 @endif

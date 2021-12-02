@@ -2,10 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Answer extends Model
 {
-    use HasFactory;
+    protected $fillable = ['attempt_id', 'question_id', 'answer'];
+
+    public function attempt() {
+        return $this->belongsTo('App\Models\Attempt');
+    }
+
+    public function question() {
+        return $this->belongsTo('App\Models\Question');
+    }
+
+
 }

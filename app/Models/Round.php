@@ -20,4 +20,36 @@ class Round extends Model
     public function questions() {
         return $this->hasMany('App\Models\Question');
     }
+
+    public function attempts() {
+        return $this->hasMany('App\Models\Attempt');
+    }
+
+    public function getSummaryAttribute() {
+        $summary = [];
+        $attempts = Attempt::where('round_id', $this->id)
+            ->with('user');
+        foreach($this->attempts as $attempt) {
+            $result = $attempt->result;
+
+            $summary[] = [
+                'id' => $attempt->user->id,
+                'name' => $attempt->user->name,
+                'score' => $result['score'],
+                'time' => $result['time']
+            ];
+        }
+
+        usort($summary, function($a, $b){
+            $retVal = $b['score'] <=> $a['score'];
+            if($retVal==0) {
+                $retVal = $a['time'] <=> $b['time'];
+            }
+            return $retVal;
+        });
+
+        return $summary;
+    }
+
+
 }

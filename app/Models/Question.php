@@ -11,4 +11,16 @@ class Question extends Model
     public function round() {
         return $this->belongsTo('App\Models\Round');
     }
+
+    public function getOptionsAttribute() {
+        $options = [];
+        $options[] = $this->answer;
+        foreach(explode(",", $this->distractors) as $distractor) {
+            $options[] = $distractor;
+        }
+
+        shuffle($options);
+
+        return $options;
+    }
 }

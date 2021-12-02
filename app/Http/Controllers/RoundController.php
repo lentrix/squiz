@@ -2,12 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Answer;
+use App\Models\Attempt;
 use App\Models\Question;
 use App\Models\Round;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class RoundController extends Controller
 {
+
+    public function __construct() {
+        $this->middleware('admin')->except(['attempt','submitAttempt','summary','showResult']);
+    }
+
     public function activate(Round $round) {
         $round->update([
             'active' => 1,
@@ -83,6 +91,68 @@ class RoundController extends Controller
 
         $question->delete();
 
-        return redirect('/round/' . $roundID . '/modify')->with('Info','A question has been deleted.');
+        return redirect('/round/' . $roundID . '/modify')->with('Info','A question has been updated.');
+    }
+
+    public function attempt(Round $round) {
+        $userID = auth()->user()->id;
+
+        $attempt = Attempt::where('round_id', $round->id)
+            ->where('user_id', $userID)->first();
+
+            if(!$attempt) {
+            $attempt = Attempt::create([
+                'round_id' => $round->id,
+                'user_id' => $userID,
+                'start' => Carbon::now()
+            ]);
+        }
+
+        if($round->closed_at) {
+            return redirect('/round/' . $round->id . '/summary')->with('Info','This round is already closed.');
+        }
+
+        if($attempt->end) {
+            return redirect('/result/' . $attempt->id);
+        }
+
+        return view('rounds.attempt', [
+            'round' => $round,
+            'attempt' => $attempt
+        ]);
+    }
+
+    public function submitAttempt(Round $round, Request $request) {
+        $userID = auth()->user()->id;
+
+        $attempt = Attempt::where('round_id', $round->id)
+            ->where('user_id', $userID)->first();
+
+        foreach($request->answer as $key=>$ans) {
+            Answer::create([
+                'attempt_id' => $attempt->id,
+                'question_id' => $key,
+                'answer' => $ans
+            ]);
+        }
+
+        $attempt->update([
+            'end' => Carbon::now()
+        ]);
+
+        return redirect('/result/' . $attempt->id);
+    }
+
+    public function showResult(Attempt $attempt) {
+        return view('rounds.result', [
+            'attempt'=>$attempt
+        ]);
+    }
+
+    public function summary(Round $round) {
+
+        return view('rounds.summary', [
+            'round' => $round,
+        ]);
     }
 }
