@@ -53,7 +53,7 @@ class PagesController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        return redirect('/')->with('Info','Welcome back ' . $user->name . "!");
+        return redirect('/')->with('Info','Welcome back ' . $user?->name . "!");
     }
 
     public function logout() {

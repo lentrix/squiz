@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h1 class="text-xl">List of Quizzes</h1>
+<h1 class="text-xl pt-3">List of Quizzes</h1>
 <hr>
 <br>
 @foreach($quizzes as $quiz)
