@@ -14,7 +14,7 @@
 
 <div class="my-2 flex">
     <div class='flex-1'><strong>Score:</strong> {{$attempt->result['score']}}</div>
-    <div class='flex-1'><strong>Time:</strong> {{$attempt->result['time']}}</div>
+    <div class='flex-1'><strong>Time:</strong> {{$attempt->result['time']}} sec</div>
 </div>
 
 <hr class="border-pink-200 border mb-3">

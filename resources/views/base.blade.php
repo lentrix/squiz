@@ -30,6 +30,13 @@
                     </div>
                 @endif
         </section>
+        @if(!auth()->guest())
+
+        <section class="bg-gray-800 py-1 text-yellow-50 text-sm text-center">
+            Welcome {{auth()->user()->name}}!
+        </section>
+
+        @endif
 
         <section id="body" class="bg-pink-100 py-5 px-3">
             @include('flash-messages')

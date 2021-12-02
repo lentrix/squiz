@@ -23,7 +23,7 @@
 
     @foreach($quiz->rounds as $round)
         <div class="border p-2 border-pink-500 mb-2 @if($round->active) bg-green-200 @else bg-pink-50 @endif">
-            {{$round->round_no}}. {{$round->name}} ({{count($round->questions)}} questions)
+            <div class="mb-2">{{$round->round_no}}. {{$round->name}} ({{count($round->questions)}} questions)</div>
             <div class="float-right">
                 @if(auth()->user()->admin)
                 <a href="{{url('/round/' . $round->id . "/activate")}}" class="ml-3" title="Activate">
@@ -36,11 +36,14 @@
                     <i class="fa fa-times"></i>
                 </a>
                 @endif
-                @if($round->active)
-                    <a href="{{url('/round/' . $round->id . "/attempt")}}" class="ml-3" title="Attempt this round">
-                        [Attempt]
-                    </a>
-                @endif
+            </div>
+            <div>
+                <a href="{{url('/round/' . $round->id . "/attempt")}}" class="bg-pink-500 text-pink-50 p-1 mr-2" title="Attempt this round">
+                    Attempt
+                </a>
+                <a href="{{url('/round/' . $round->id . "/summary")}}" class="bg-green-500 text-pink-50 p-1 mr-2" title="Attempt this round">
+                    Summary
+                </a>
             </div>
         </div>
     @endforeach

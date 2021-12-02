@@ -35,7 +35,7 @@ class Attempt extends Model
 
         return [
             'score' => $score,
-            'time' => $this->start->diffInSeconds($this->end)
+            'time' => $this->start?->diffInSeconds($this->end)
         ];
     }
 }

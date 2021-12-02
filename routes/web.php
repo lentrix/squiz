@@ -37,6 +37,7 @@ Route::group(['middleware'=>'auth'], function() {
     Route::get('/round/{round}/attempt', [RoundController::class, 'attempt']);
     Route::post('/round/{round}/attempt', [RoundController::class, 'submitAttempt']);
     Route::get('/round/{round}/summary', [RoundController::class, 'summary']);
+    Route::post('/round/{round}/qualify', [RoundController::class, 'qualify']);
 
     Route::get('/question/{question}/edit', [RoundController::class, 'editQuestionForm']);
     Route::put('/question/{question}/edit', [RoundController::class, 'editQuestion']);

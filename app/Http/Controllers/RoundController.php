@@ -100,7 +100,7 @@ class RoundController extends Controller
         $attempt = Attempt::where('round_id', $round->id)
             ->where('user_id', $userID)->first();
 
-            if(!$attempt) {
+        if(!$attempt && $round->round_no==1 && !$round->closed_at) {
             $attempt = Attempt::create([
                 'round_id' => $round->id,
                 'user_id' => $userID,
@@ -108,12 +108,20 @@ class RoundController extends Controller
             ]);
         }
 
-        if($round->closed_at) {
-            return redirect('/round/' . $round->id . '/summary')->with('Info','This round is already closed.');
+        if(!$attempt){
+            return back()->with('Error','Sorry! You did not qualify to the next round');
         }
 
         if($attempt->end) {
             return redirect('/result/' . $attempt->id);
+        }
+
+        if($round->closed_at) {
+            return redirect('/round/' . $round->id . '/summary')->with('Info','This round is already closed.');
+        }
+
+        if($attempt && !$attempt->start) {
+            $attempt->update(['start'=>Carbon::now()]);
         }
 
         return view('rounds.attempt', [
@@ -154,5 +162,24 @@ class RoundController extends Controller
         return view('rounds.summary', [
             'round' => $round,
         ]);
+    }
+
+    public function qualify(Round $round, Request $request) {
+        $nextRound = Round::where('quiz_id', $round->quiz_id)
+            ->where('round_no', $round->round_no + 1)->first();
+
+        if(!$nextRound) {
+            return back()->with('Error', 'There are no more rounds left.');
+        }
+
+        //Create qualifier attempts
+        foreach($request->qualifiers as $qualifier) {
+            Attempt::create([
+                'round_id' => $nextRound->id,
+                'user_id' => $qualifier
+            ]);
+        }
+
+        return redirect('/quiz/' . $round->quiz_id)->with('Info','There are ' . count($request->qualifiers) . ' qualifiers for the ' . $nextRound->name);
     }
 }
