@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\RaffleController;
 use App\Http\Controllers\RoundController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [PagesController::class, 'index']);
+Route::get('/', [PagesController::class, 'index'])->name('login');
 Route::get('/register', [PagesController::class, 'registrationForm']);
 Route::post('/register', [PagesController::class, 'register']);
 Route::post('/login', [PagesController::class, 'login']);
@@ -44,6 +45,8 @@ Route::group(['middleware'=>'auth'], function() {
     Route::get('/question/{question}/delete', [RoundController::class, 'deleteQuestion']);
 
     Route::get('/result/{attempt}', [RoundController::class, 'showResult']);
+
+    Route::get('/raffle', [RaffleController::class, 'index']);
 });
 
 
