@@ -47,6 +47,9 @@ Route::group(['middleware'=>'auth'], function() {
     Route::get('/result/{attempt}', [RoundController::class, 'showResult']);
 
     Route::get('/raffle', [RaffleController::class, 'index']);
+    Route::post('/raffle-item', [RaffleController::class, 'addItem']);
+    Route::post('/raffle-winner', [RaffleController::class, 'raffleWinner']);
+    Route::get('/raffle/{item}', [RaffleController::class, 'raffleAnItem']);
 });
 
 
