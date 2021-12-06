@@ -30,7 +30,7 @@ class Round extends Model
         $attempts = Attempt::where('round_id', $this->id)
             ->with('user');
         foreach($this->attempts as $attempt) {
-            $result = $attempt->result;
+            $result = $attempt->filteredResult;
 
             $summary[] = [
                 'id' => $attempt->user->id,

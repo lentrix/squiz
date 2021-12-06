@@ -38,4 +38,16 @@ class Attempt extends Model
             'time' => $this->start?->diffInSeconds($this->end)
         ];
     }
+
+    public function getFilteredResultAttribute() {
+        $score = 0;
+        foreach($this->round->questions as $question) {
+            $answer = Answer::where('attempt_id', $this->id,'question_id', $question->id)->first();
+            if($answer->answer == $question->answer) {
+                $score++;
+            }
+        }
+
+        return $score;
+    }
 }
