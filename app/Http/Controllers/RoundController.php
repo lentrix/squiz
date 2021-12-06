@@ -97,6 +97,10 @@ class RoundController extends Controller
     public function attempt(Round $round) {
         $userID = auth()->user()->id;
 
+        if(!$round->active) {
+            return back()->with('Error','This round is closed.');
+        }
+
         $attempt = Attempt::where('round_id', $round->id)
             ->where('user_id', $userID)->first();
 

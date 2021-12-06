@@ -25,6 +25,7 @@
                         <a href="{{url('/')}}" class="ml-3"><i class="fa fa-home"></i> Home</a>
                         @if(auth()->user()->admin)
                             <a href="{{url('/quiz/create')}}" class="ml-3"><i class="fa fa-plus"></i> Create</a>
+                            <a href="{{url('/raffle')}}" class="ml-3"><i class="fas fa-award"></i> Raffle</a>
                         @endif
                         <a href="{{url('/logout')}}" class="ml-3"><i class="fa fa-sign-out"></i> Logout</a>
                     </div>
